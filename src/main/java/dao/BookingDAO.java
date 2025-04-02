@@ -3,7 +3,6 @@ package dao;
 import config.DatabaseConfig;
 import dao.impl.BookingDaoImpl;
 import model.Booking;
-import model.Flight;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.List;
 public class BookingDAO implements BookingDaoImpl {
     @Override
     public void save(Booking booking) {
-        String sql = "INSERT INTO booking (booking_id, passengers_names, flight_id) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO booking (booking_id, passengers_names, flight_id , booking_date) VALUES (?, ?, ? ,?)";
         try (Connection conn = DatabaseConfig.getConnection()
              ; PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
@@ -21,6 +20,7 @@ public class BookingDAO implements BookingDaoImpl {
             stmt.setInt(1, booking.getId());
             stmt.setString(2, passengersNames);
             stmt.setInt(3, booking.getFlight().getId());
+            stmt.setTimestamp(4, new Timestamp(booking.getBookingDate().getTime()));
 
             int rowsInserted = stmt.executeUpdate();
         } catch (SQLException e) {
@@ -30,6 +30,7 @@ public class BookingDAO implements BookingDaoImpl {
 
     @Override
     public void delete(Booking booking) {
+
         String sql = "UPDATE booking SET cancel = true WHERE booking_id = ?";
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -51,7 +52,8 @@ public class BookingDAO implements BookingDaoImpl {
 
             while (rs.next()) {
                 Booking booking = new Booking();
-                booking.setId(rs.getInt("booking_id"));
+                rs.getInt("booking_id");
+
 
             }
         } catch (SQLException e) {

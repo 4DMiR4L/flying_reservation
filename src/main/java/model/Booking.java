@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -7,14 +8,18 @@ public class Booking {
     private int id;
     private List<String> passengersNames;
     private Flight flight;
+    private Date bookingDate;
 
-    public Booking(int id, List<String> passengersNames, Flight flight) {
+
+
+    public Booking() {
+    }
+
+    public Booking(int id, List<String> passengersNames, Flight flight, Date bookingDate) {
         this.id = id;
         this.passengersNames = passengersNames;
         this.flight = flight;
-    }
-
-    public Booking() {
+        this.bookingDate = bookingDate;
     }
 
     public int getId() {
@@ -41,15 +46,23 @@ public class Booking {
         this.flight = flight;
     }
 
+    public Date getBookingDate() {
+        return bookingDate;
+    }
+
+    public void setBookingDate(Date bookingDate) {
+        this.bookingDate = bookingDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Booking booking)) return false;
-        return id == booking.id && Objects.equals(passengersNames, booking.passengersNames) && Objects.equals(flight, booking.flight);
+        return id == booking.id && Objects.equals(passengersNames, booking.passengersNames) && Objects.equals(flight, booking.flight) && Objects.equals(bookingDate, booking.bookingDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, passengersNames, flight);
+        return Objects.hash(id, passengersNames, flight, bookingDate);
     }
 
     @Override
@@ -58,6 +71,7 @@ public class Booking {
                 "id=" + id +
                 ", passengersNames=" + passengersNames +
                 ", flight=" + flight +
+                ", bookingDate=" + bookingDate +
                 '}';
     }
 }
