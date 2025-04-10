@@ -1,20 +1,23 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
 public class Flight {
     private int id;
-    private Date date;
-    private String destination;
+    private LocalDateTime date;
+    private Cities initialPoint;
+    private Cities destination;
     private int availableSeats;
 
     public Flight() {
     }
 
-    public Flight(int id, Date date, String destination, int availableSeats) {
+    public Flight(int id, LocalDateTime date, Cities initialPoint, Cities destination, int availableSeats) {
         this.id = id;
         this.date = date;
+        this.initialPoint = initialPoint;
         this.destination = destination;
         this.availableSeats = availableSeats;
     }
@@ -27,19 +30,27 @@ public class Flight {
         this.id = id;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
-    public String getDestination() {
+    public Cities getInitialPoint() {
+        return initialPoint;
+    }
+
+    public void setInitialPoint(Cities initialPoint) {
+        this.initialPoint = initialPoint;
+    }
+
+    public Cities getDestination() {
         return destination;
     }
 
-    public void setDestination(String destination) {
+    public void setDestination(Cities destination) {
         this.destination = destination;
     }
 
@@ -54,12 +65,12 @@ public class Flight {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Flight flight)) return false;
-        return id == flight.id && availableSeats == flight.availableSeats && Objects.equals(date, flight.date) && Objects.equals(destination, flight.destination);
+        return id == flight.id && availableSeats == flight.availableSeats && Objects.equals(date, flight.date) && initialPoint == flight.initialPoint && destination == flight.destination;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, date, destination, availableSeats);
+        return Objects.hash(id, date, initialPoint, destination, availableSeats);
     }
 
     @Override
@@ -67,7 +78,8 @@ public class Flight {
         return "Flight{" +
                 "id=" + id +
                 ", date=" + date +
-                ", destination='" + destination + '\'' +
+                ", initialPoint=" + initialPoint +
+                ", destination=" + destination +
                 ", availableSeats=" + availableSeats +
                 '}';
     }

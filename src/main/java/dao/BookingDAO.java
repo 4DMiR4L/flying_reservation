@@ -13,7 +13,8 @@ public class BookingDAO implements BookingDaoImpl {
     public void save(Booking booking) {
         String sql = "INSERT INTO booking (booking_id, passengers_names, flight_id , booking_date) VALUES (?, ?, ? ,?)";
         try (Connection conn = DatabaseConfig.getConnection()
-             ; PreparedStatement stmt = conn.prepareStatement(sql)
+             ;
+             PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
             String passengersNames =  String.join(",", booking.getPassengersNames());
 
@@ -21,6 +22,8 @@ public class BookingDAO implements BookingDaoImpl {
             stmt.setString(2, passengersNames);
             stmt.setInt(3, booking.getFlight().getId());
             stmt.setTimestamp(4, new Timestamp(booking.getBookingDate().getTime()));
+
+            conn.setAutoCommit(false) ;
 
             int rowsInserted = stmt.executeUpdate();
         } catch (SQLException e) {
