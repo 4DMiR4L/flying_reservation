@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 public class LoggerHelper {
     //dokerde görmey ve daha profesional olması üçün
-    private static final Logger log = LoggerFactory.getLogger(LoggerHelper.class);
+    public static final Logger log = LoggerFactory.getLogger(LoggerHelper.class);
 
     public static void info(String message) {
         log.info(message);

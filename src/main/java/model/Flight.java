@@ -22,6 +22,9 @@ public class Flight {
         this.availableSeats = availableSeats;
     }
 
+    public Flight(int flightId, Cities cities, Cities initialPoint, LocalDateTime departureTime, int numOfSeats) {
+    }
+
     public int getId() {
         return id;
     }

@@ -13,5 +13,5 @@ public interface FlightDaoImpl {
 
     void cancelFlight(long flightId);
 
-    List<Flight> findByOrigin(String origin);
+    List<Flight> findByInitialPoint(String origin);
 }
