@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  database:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+
+    ports:
+      - "5434:5433"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: flying_reservation
+    depends_on:
+      - database
+    environment:
+      DB_URL: jdbc:postgresql://database:5433/postgres
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata:
