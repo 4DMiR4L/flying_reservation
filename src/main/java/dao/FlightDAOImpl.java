@@ -27,24 +27,71 @@ public class FlightDAOImpl implements FlightDao {
             query.setInt(4, flight.getAvailableSeats());
             query.executeUpdate();
 
+        } catch (SQLException e) {
+            LoggerHelper.log.error("SQLException: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Flight> findByInitialPoint(String initialPoint) {
+        List<Flight> flightEntities = new ArrayList<>();
+        String sql = "select * from flight where initial_point = ?";
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement query = conn.prepareStatement(sql);
+             ResultSet resultSet = query.executeQuery()) {
+            while (resultSet.next()) {
+                int flightId = resultSet.getInt("id");
+                String origin = resultSet.getString("origin");
+                String destination = resultSet.getString("destination");
+                LocalDateTime departureTime = resultSet.getTimestamp("departure_time").toLocalDateTime();
+                int numOfSeats = resultSet.getInt("free_seats");
+                flightEntities.add(new Flight(flightId, Cities.fromString(origin), Cities.fromString(destination), departureTime, numOfSeats));
+            }
+        } catch (SQLException e) {
+            LoggerHelper.log.error("Failed to find all flights: " + e.getMessage(), e);
+        }
+        return flightEntities;
+    }
+
+    @Override
+    public void cancelFlight(int flightId) {
+        String deleteBookingPassengerByFlightId = "DELETE FROM booking_passenger WHERE booking_id IN (SELECT id FROM booking WHERE flight_id = ?)";
+        String deleteBookingsByFlightId = "DELETE FROM bookings WHERE flight_id = ?";
+        String cancelFlightSql = "DELETE FROM flight WHERE flight_id = ?";
+
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            try {
+                try (PreparedStatement deleteBookingPassengerById = conn.prepareStatement(deleteBookingPassengerByFlightId)) {
+                    deleteBookingPassengerById.setInt(1, flightId);
+                    deleteBookingPassengerById.executeUpdate();
+                } catch (SQLException e) {
+                    LoggerHelper.log.error(" Delete booking passenger by flight id: " + e.getMessage());
+                }
+
+                try (PreparedStatement deleteBookingbyFlightid = conn.prepareStatement(deleteBookingsByFlightId)) {
+                    deleteBookingbyFlightid.setInt(1, flightId);
+                    deleteBookingbyFlightid.executeUpdate();
+                } catch (SQLException e) {
+                    LoggerHelper.log.error(" Delete bookings by flight id: " + e.getMessage());
+                }
+
+                try (PreparedStatement cancelFlight = conn.prepareStatement(cancelFlightSql)) {
+                    cancelFlight.setInt(1, flightId);
+                    cancelFlight.executeUpdate();
+                } catch (SQLException e) {
+                    LoggerHelper.log.error(" Cancel flight id: " + e.getMessage());
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }catch (SQLException e) {
             LoggerHelper.log.error("SQLException: " + e.getMessage());
         }
     }
 
     @Override
-    public List<Flight> findByInitialPoint(String origin) {
-        return List.of();
-    }
-
-    @Override
-    public void cancelFlight(long flightId) {
-
-    }
-
-    @Override
     public List<Flight> findAll() {
-        List<Flight> flight =new ArrayList<>();
+        List<Flight> flight = new ArrayList<>();
         String sql = "select * from flight";
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement query = conn.prepareStatement(sql);
@@ -82,5 +129,26 @@ public class FlightDAOImpl implements FlightDao {
             LoggerHelper.log.error("Failed to find flight by ID: " + e.getMessage(), e);
         }
         return null;
+    }
+
+    public List<Flight> findByDestination(String destination) {
+        List<Flight> flight = new ArrayList<>();
+        String sql = "select * from flight where destination = ?";
+        try(Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement stmt =conn.prepareStatement(sql)) {
+
+            stmt.setString(1 , destination);
+            ResultSet resultSet = stmt.executeQuery();
+            while (resultSet.next()) {
+                int flightId = resultSet.getInt("id");
+                String initialPoint = resultSet.getString("initialPoint");
+                LocalDateTime departureTime = resultSet.getTimestamp("departure_time").toLocalDateTime();
+                int numOfSeats = resultSet.getInt("free_seats");
+                flight.add(new Flight(flightId, Cities.fromString(initialPoint), Cities.fromString(destination), departureTime, numOfSeats));
+            }
+        } catch (SQLException e) {
+           LoggerHelper.log.error("Failed to find flight by destination: " + e.getMessage(), e);
+        }
+        return flight;
     }
 }
