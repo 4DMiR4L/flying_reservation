@@ -1,7 +1,7 @@
 package dao;
 
 import config.DatabaseConfig;
-import dao.impl.FlightDaoImpl;
+import dao.impl.FlightDao;
 import helper.LoggerHelper;
 import model.Cities;
 import model.Flight;
@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlightDAO implements FlightDaoImpl {
-    public FlightDAO() {
+public class FlightDAOImpl implements FlightDao {
+    public FlightDAOImpl() {
         super();
     }
 

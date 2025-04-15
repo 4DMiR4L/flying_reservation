@@ -4,7 +4,7 @@ import model.Flight;
 
 import java.util.List;
 
-public interface FlightDaoImpl {
+public interface FlightDao {
     void save(Flight entity);
 
     Flight findById(long id);
