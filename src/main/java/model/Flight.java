@@ -1,12 +1,11 @@
 package model;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Objects;
 
 public class Flight {
     private int id;
-    private LocalDateTime date;
+    private LocalDateTime departureTime;
     private Cities initialPoint;
     private Cities destination;
     private int availableSeats;
@@ -14,9 +13,16 @@ public class Flight {
     public Flight() {
     }
 
+    public Flight(LocalDateTime date, Cities initialPoint, Cities destination, int availableSeats) {
+        this.departureTime = date;
+        this.initialPoint = initialPoint;
+        this.destination = destination;
+        this.availableSeats = availableSeats;
+    }
+
     public Flight(int id, LocalDateTime date, Cities initialPoint, Cities destination, int availableSeats) {
         this.id = id;
-        this.date = date;
+        this.departureTime = date;
         this.initialPoint = initialPoint;
         this.destination = destination;
         this.availableSeats = availableSeats;
@@ -33,12 +39,12 @@ public class Flight {
         this.id = id;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getDepartureTime() {
+        return departureTime;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setDepartureTime(LocalDateTime departureTime) {
+        this.departureTime = departureTime;
     }
 
     public Cities getInitialPoint() {
@@ -68,19 +74,19 @@ public class Flight {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Flight flight)) return false;
-        return id == flight.id && availableSeats == flight.availableSeats && Objects.equals(date, flight.date) && initialPoint == flight.initialPoint && destination == flight.destination;
+        return id == flight.id && availableSeats == flight.availableSeats && Objects.equals(departureTime, flight.departureTime) && initialPoint == flight.initialPoint && destination == flight.destination;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, date, initialPoint, destination, availableSeats);
+        return Objects.hash(id, departureTime, initialPoint, destination, availableSeats);
     }
 
     @Override
     public String toString() {
         return "Flight{" +
                 "id=" + id +
-                ", date=" + date +
+                ", departureTime=" + departureTime +
                 ", initialPoint=" + initialPoint +
                 ", destination=" + destination +
                 ", availableSeats=" + availableSeats +

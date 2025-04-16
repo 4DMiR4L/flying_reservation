@@ -23,7 +23,7 @@ public class FlightDAOImpl implements FlightDao {
              PreparedStatement query = conn.prepareStatement(sql)) {
             query.setString(1, flight.getInitialPoint().name().toUpperCase());
             query.setString(2, flight.getDestination().name().toUpperCase());
-            query.setTimestamp(3, Timestamp.valueOf(flight.getDate()));
+            query.setTimestamp(3, Timestamp.valueOf(flight.getDepartureTime()));
             query.setInt(4, flight.getAvailableSeats());
             query.executeUpdate();
 
