@@ -22,6 +22,9 @@ public class Booking {
         this.bookingDate = bookingDate;
     }
 
+    public Booking(long id, List<String> passengerNames) {
+    }
+
     public int getId() {
         return id;
     }
