@@ -21,8 +21,6 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = new Booking(bookingDto.getId(), bookingDto.getPassengerNames());
         bookingDao.save(booking);
         bookingDto.setId(booking.getId());
-
-
     }
 
     @Override
